@@ -49,13 +49,12 @@ public final class PresenterLoader<T extends Presenter> extends Loader<T> {
 
     @Override
     protected void onStopLoading() {
-        super.onStopLoading();
         Log.i("loader", "onStopLoading-" + tag);
     }
 
     @Override
     protected void onReset() {
-        Log.e("loader", "onReset-" + tag);
+        Log.i("loader", "onReset-" + tag);
         if (presenter != null) {
             presenter.onDestroyed();
             presenter = null;

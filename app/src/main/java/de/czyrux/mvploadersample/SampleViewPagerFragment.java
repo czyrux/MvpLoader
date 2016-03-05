@@ -1,4 +1,4 @@
-package de.czyrux.mvploadersample.pager;
+package de.czyrux.mvploadersample;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,21 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import de.czyrux.mvploadersample.ColorPicker;
-import de.czyrux.mvploadersample.R;
-import de.czyrux.mvploadersample.single.SimpleFragment;
-
-public class PagerFragment extends Fragment {
+public class SampleViewPagerFragment extends Fragment {
     private static final String ARG_PAGES = "pages";
+    private static final int MIN_OFF_SCREEN_LIMIT = 2;
 
     private int pages;
     private ViewPager viewPager;
 
-    public static PagerFragment newInstance(int pages) {
+    public static SampleViewPagerFragment newInstance(int pages) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGES, pages);
 
-        PagerFragment fragment = new PagerFragment();
+        SampleViewPagerFragment fragment = new SampleViewPagerFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,11 +47,14 @@ public class PagerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewPager.setAdapter(new PagerAdapter(getChildFragmentManager(), pages));
-        viewPager.setOffscreenPageLimit(Math.max(4, pages / 2));
+        viewPager.setOffscreenPageLimit(Math.max(MIN_OFF_SCREEN_LIMIT, pages / 2));
     }
 
 
     private static class PagerAdapter extends FragmentStatePagerAdapter {
+
+        private static int[] COLOR_ARRAY = new int[]{R.color.blue, R.color.yellow, R.color.brown, R.color.pink,
+                R.color.blue_gray, R.color.deep_purple, R.color.green};
 
         private final int numberOfPages;
 
@@ -65,7 +65,7 @@ public class PagerFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return SimpleFragment.newInstance("#-" + position, ColorPicker.getRandomColor());
+            return SampleFragment.newInstance("fragment-#" + position, COLOR_ARRAY[position % COLOR_ARRAY.length]);
         }
 
         @Override

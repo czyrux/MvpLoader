@@ -19,19 +19,19 @@ public abstract class BasePresenterActivity<P extends Presenter> extends AppComp
 
     @Override
     public final Loader<P> onCreateLoader(int id, Bundle args) {
-        Log.e("base-activity", "onCreateLoader");
+        Log.i("base-activity", "onCreateLoader");
         return new PresenterLoader<>(this, getPresenterFactory(), tag());
     }
 
     @Override
     public final void onLoadFinished(Loader<P> loader, P data) {
-        Log.e("base-activity", "onLoadFinished");
+        Log.i("base-activity", "onLoadFinished");
         onPresenterPrepared(data);
     }
 
     @Override
     public final void onLoaderReset(Loader<P> loader) {
-        Log.e("base-activity", "onLoaderReset");
+        Log.i("base-activity", "onLoaderReset");
         onPresenterDestroyed();
     }
 

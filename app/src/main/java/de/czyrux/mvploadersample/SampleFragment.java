@@ -1,4 +1,4 @@
-package de.czyrux.mvploadersample.single;
+package de.czyrux.mvploadersample;
 
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
@@ -8,14 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Locale;
-
-import de.czyrux.mvploadersample.R;
 import de.czyrux.mvploadersample.base.BasePresenterFragment;
 import de.czyrux.mvploadersample.base.PresenterFactory;
+import de.czyrux.mvploadersample.presenter.SamplePresenter;
+import de.czyrux.mvploadersample.presenter.SamplePresenterFactory;
+import de.czyrux.mvploadersample.presenter.SampleView;
 
-public class SimpleFragment extends BasePresenterFragment<SimplePresenter> implements SimpleView {
-    private static final String TAG = "SingleFragment";
+public class SampleFragment extends BasePresenterFragment<SamplePresenter> implements SampleView {
+    private static final String TAG = "SampleFragment";
     private static final String ARG_NAME = "name";
     private static final String ARG_COLOR = "color";
 
@@ -24,14 +24,14 @@ public class SimpleFragment extends BasePresenterFragment<SimplePresenter> imple
     private String name;
 
     private TextView titleTextView;
-    private SimplePresenter presenter;
+    private SamplePresenter presenter;
 
-    public static SimpleFragment newInstance(String name, @ColorRes int color) {
+    public static SampleFragment newInstance(String name, @ColorRes int color) {
         Bundle args = new Bundle();
         args.putString(ARG_NAME, name);
         args.putInt(ARG_COLOR, color);
 
-        SimpleFragment fragment = new SimpleFragment();
+        SampleFragment fragment = new SampleFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,17 +55,8 @@ public class SimpleFragment extends BasePresenterFragment<SimplePresenter> imple
         view.setBackgroundColor(getResources().getColor(color));
 
         titleTextView = (TextView) view.findViewById(R.id.single_text);
-        Log.d(TAG, "onCreateView-" + name);
-
         return view;
     }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated-" + name);
-    }
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -73,19 +64,19 @@ public class SimpleFragment extends BasePresenterFragment<SimplePresenter> imple
         Log.d(TAG, "onActivityCreated-" + tag());
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart-" + tag());
-        Log.d(TAG, "onStart-is_null:" + String.valueOf(presenter == null).toUpperCase(Locale.ENGLISH));
+        // When first created the Fragment, the Presenter will be initialized at this point, but on
+        // a configuration change it wont be ready until onResume
+        Log.d(TAG, "onStart- is_presenter_null:" + String.valueOf(presenter == null));
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume-" + tag());
-        Log.e(TAG, "presenter.onViewAttached-" + tag());
         presenter.onViewAttached(this);
     }
 
@@ -109,12 +100,12 @@ public class SimpleFragment extends BasePresenterFragment<SimplePresenter> imple
     }
 
     @Override
-    protected PresenterFactory<SimplePresenter> getPresenterFactory() {
-        return new SimplePresenterFactory(name);
+    protected PresenterFactory<SamplePresenter> getPresenterFactory() {
+        return new SamplePresenterFactory(name);
     }
 
     @Override
-    protected void onPresenterPrepared(SimplePresenter presenter) {
+    protected void onPresenterPrepared(SamplePresenter presenter) {
         this.presenter = presenter;
         Log.d(TAG, "onPresenterPrepared-" + tag());
     }

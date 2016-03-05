@@ -11,7 +11,8 @@ public abstract class BasePresenterFragment<P extends Presenter> extends Fragmen
 
     private static final int LOADER_ID = 101;
 
-    // boolean flag to avoid delivering the result twice.
+    // boolean flag to avoid delivering the result twice. Calling initLoader in onActivityCreated makes
+    // onLoadFinished will be called twice during configuration change.
     private boolean delivered = false;
 
     @Override
@@ -19,12 +20,6 @@ public abstract class BasePresenterFragment<P extends Presenter> extends Fragmen
         super.onActivityCreated(savedInstanceState);
         Log.i("base-fragment", "onActivityCreated-" + tag());
         getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i("base-fragment", "onResume-" + tag());
     }
 
     @Override

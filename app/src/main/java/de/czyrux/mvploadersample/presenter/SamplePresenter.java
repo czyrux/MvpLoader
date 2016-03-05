@@ -1,19 +1,19 @@
-package de.czyrux.mvploadersample.single;
+package de.czyrux.mvploadersample.presenter;
 
 import de.czyrux.mvploadersample.base.Presenter;
 
-public class SimplePresenter implements Presenter<SimpleView> {
+public class SamplePresenter implements Presenter<SampleView> {
 
     private final String title;
-    private SimpleView view;
+    private SampleView view;
     int count = 0;
 
-    public SimplePresenter(String title) {
+    public SamplePresenter(String title) {
         this.title = title;
     }
 
     @Override
-    public void onViewAttached(SimpleView view) {
+    public void onViewAttached(SampleView view) {
         this.view = view;
         this.count++;
         this.view.showMessage(title + ". View attached " + count + " times");

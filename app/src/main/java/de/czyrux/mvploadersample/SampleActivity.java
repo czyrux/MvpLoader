@@ -11,22 +11,28 @@ import android.widget.Toast;
 import de.czyrux.mvploadersample.base.BasePresenterActivity;
 import de.czyrux.mvploadersample.base.Presenter;
 import de.czyrux.mvploadersample.base.PresenterFactory;
-import de.czyrux.mvploadersample.pager.PagerFragment;
-import de.czyrux.mvploadersample.single.SimpleFragment;
-import de.czyrux.mvploadersample.single.SimplePresenter;
-import de.czyrux.mvploadersample.single.SimplePresenterFactory;
-import de.czyrux.mvploadersample.single.SimpleView;
+import de.czyrux.mvploadersample.presenter.SamplePresenter;
+import de.czyrux.mvploadersample.presenter.SamplePresenterFactory;
+import de.czyrux.mvploadersample.presenter.SampleView;
 
-public class MvpActivity extends BasePresenterActivity<SimplePresenter> implements SimpleView {
-    private static final String TAG = "MvpActivity";
+public class SampleActivity extends BasePresenterActivity<SamplePresenter> implements SampleView {
+    private static final String TAG = "SampleActivity";
+    private static final int NUMBER_OF_PAGES = 3;
 
-    private Presenter<SimpleView> presenter;
+    private Presenter<SampleView> presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mvp);
         Log.e(TAG, "onCreate-" + tag());
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, SampleFragment.newInstance("fragment", R.color.yellow))
+                    .commit();
+        }
     }
 
 
@@ -50,12 +56,12 @@ public class MvpActivity extends BasePresenterActivity<SimplePresenter> implemen
     }
 
     @Override
-    protected PresenterFactory<SimplePresenter> getPresenterFactory() {
-        return new SimplePresenterFactory(tag());
+    protected PresenterFactory<SamplePresenter> getPresenterFactory() {
+        return new SamplePresenterFactory(tag());
     }
 
     @Override
-    protected void onPresenterPrepared(SimplePresenter presenter) {
+    protected void onPresenterPrepared(SamplePresenter presenter) {
         this.presenter = presenter;
     }
 
@@ -70,13 +76,13 @@ public class MvpActivity extends BasePresenterActivity<SimplePresenter> implemen
 
         int id = item.getItemId();
         if (id == R.id.menu_single) {
-            replaceFragment(SimpleFragment.newInstance("Single", ColorPicker.getRandomColor()));
+            replaceFragment(SampleFragment.newInstance("fragment", R.color.green));
             return true;
         } else if (id == R.id.menu_pager) {
-            replaceFragment(PagerFragment.newInstance(4));
+            replaceFragment(SampleViewPagerFragment.newInstance(NUMBER_OF_PAGES));
             return true;
         } else if (id == R.id.menu_activity) {
-            startActivity(new Intent(this, MvpActivity.class));
+            startActivity(new Intent(this, SampleActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
