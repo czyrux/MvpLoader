@@ -15,7 +15,7 @@ import de.czyrux.mvploadersample.presenter.SamplePresenter;
 import de.czyrux.mvploadersample.presenter.SamplePresenterFactory;
 import de.czyrux.mvploadersample.presenter.SampleView;
 
-public class SampleActivity extends BasePresenterActivity<SamplePresenter> implements SampleView {
+public class SampleActivity extends BasePresenterActivity<SamplePresenter, SampleView> implements SampleView {
     private static final String TAG = "SampleActivity";
     private static final int NUMBER_OF_PAGES = 3;
 
@@ -33,21 +33,6 @@ public class SampleActivity extends BasePresenterActivity<SamplePresenter> imple
                     .replace(R.id.fragment_container, SampleFragment.newInstance("fragment", R.color.yellow))
                     .commit();
         }
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.e(TAG, "onStart-" + tag());
-        presenter.onViewAttached(this);
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.onViewDetached();
-        super.onStop();
-        Log.e(TAG, "onStop-" + tag());
     }
 
     @Override

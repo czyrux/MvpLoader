@@ -14,7 +14,7 @@ import de.czyrux.mvploadersample.presenter.SamplePresenter;
 import de.czyrux.mvploadersample.presenter.SamplePresenterFactory;
 import de.czyrux.mvploadersample.presenter.SampleView;
 
-public class SampleFragment extends BasePresenterFragment<SamplePresenter> implements SampleView {
+public class SampleFragment extends BasePresenterFragment<SamplePresenter, SampleView> implements SampleView {
     private static final String TAG = "SampleFragment";
     private static final String ARG_NAME = "name";
     private static final String ARG_COLOR = "color";
@@ -77,21 +77,20 @@ public class SampleFragment extends BasePresenterFragment<SamplePresenter> imple
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume-" + tag());
-        presenter.onViewAttached(this);
+        Log.d(TAG, "onResume- is_presenter_null:" + String.valueOf(presenter == null));
     }
 
     @Override
     public void onPause() {
-        presenter.onViewDetached();
         super.onPause();
-        Log.d(TAG, "onPause-" + name);
+        Log.d(TAG, "onPause-" + tag());
 
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop-" + name);
+        Log.d(TAG, "onStop-" + tag());
     }
 
     @Override
