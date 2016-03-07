@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import de.czyrux.mvploadersample.base.BasePresenterActivity;
-import de.czyrux.mvploadersample.base.Presenter;
 import de.czyrux.mvploadersample.base.PresenterFactory;
 import de.czyrux.mvploadersample.presenter.SamplePresenter;
 import de.czyrux.mvploadersample.presenter.SamplePresenterFactory;
@@ -18,8 +17,6 @@ import de.czyrux.mvploadersample.presenter.SampleView;
 public class SampleActivity extends BasePresenterActivity<SamplePresenter, SampleView> implements SampleView {
     private static final String TAG = "SampleActivity";
     private static final int NUMBER_OF_PAGES = 3;
-
-    private Presenter<SampleView> presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +33,12 @@ public class SampleActivity extends BasePresenterActivity<SamplePresenter, Sampl
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(TAG, "onStart-" + tag());
+    }
+
+    @Override
     protected String tag() {
         return "activity";
     }
@@ -47,7 +50,7 @@ public class SampleActivity extends BasePresenterActivity<SamplePresenter, Sampl
 
     @Override
     protected void onPresenterPrepared(SamplePresenter presenter) {
-        this.presenter = presenter;
+        // Nothing right now
     }
 
     @Override
