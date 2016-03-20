@@ -36,7 +36,6 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
                     BasePresenterFragment.this.presenter = presenter;
                     delivered = true;
                     onPresenterPrepared(presenter);
-                    presenter.onViewAttached(getPresenterView());
                 }
             }
 
@@ -50,9 +49,16 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
     }
 
     @Override
-    public void onStop() {
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume-" + tag());
+        presenter.onViewAttached(getPresenterView());
+    }
+
+    @Override
+    public void onPause() {
         presenter.onViewDetached();
-        super.onStop();
+        super.onPause();
         Log.i(TAG, "onPause-" + tag());
     }
 
