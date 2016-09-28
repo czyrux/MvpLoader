@@ -22,7 +22,7 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
         Log.i(TAG, "onActivityCreated-" + tag());
 
         // LoaderCallbacks as an object, so no hint regarding loader will be leak to the subclasses.
-        getLoaderManager().initLoader(LOADER_ID, null, new LoaderManager.LoaderCallbacks<P>() {
+        getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, new LoaderManager.LoaderCallbacks<P>() {
             @Override
             public final Loader<P> onCreateLoader(int id, Bundle args) {
                 Log.i(TAG, "onCreateLoader-" + tag());
