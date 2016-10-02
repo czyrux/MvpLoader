@@ -11,9 +11,6 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
     private static final String TAG = "base-fragment";
     private static final int LOADER_ID = 101;
 
-    // boolean flag to avoid delivering the result twice. Calling initLoader in onActivityCreated makes
-    // onLoadFinished will be called twice during configuration change.
-    private boolean delivered = false;
     private Presenter<V> presenter;
 
     @Override
@@ -32,11 +29,8 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
                 Log.i(TAG, "onLoadFinished-" + tag());
-                if (!delivered) {
-                    BasePresenterFragment.this.presenter = presenter;
-                    delivered = true;
-                    onPresenterPrepared(presenter);
-                }
+                BasePresenterFragment.this.presenter = presenter;
+                onPresenterPrepared(presenter);
             }
 
             @Override
@@ -52,7 +46,7 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
     public void onResume() {
         super.onResume();
         Log.i(TAG, "onResume-" + tag());
-        presenter.onViewAttached(getPresenterView());
+       presenter.onViewAttached(getPresenterView());
     }
 
     @Override
