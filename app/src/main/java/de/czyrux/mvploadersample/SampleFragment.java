@@ -2,6 +2,7 @@ package de.czyrux.mvploadersample;
 
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,18 +94,20 @@ public class SampleFragment extends BasePresenterFragment<SamplePresenter, Sampl
         Log.d(TAG, "onStop-" + tag());
     }
 
+    @NonNull
     @Override
     protected String tag() {
         return name;
     }
 
+    @NonNull
     @Override
     protected PresenterFactory<SamplePresenter> getPresenterFactory() {
         return new SamplePresenterFactory(name);
     }
 
     @Override
-    protected void onPresenterPrepared(SamplePresenter presenter) {
+    protected void onPresenterPrepared(@NonNull SamplePresenter presenter) {
         this.presenter = presenter;
         Log.d(TAG, "onPresenterPrepared-" + tag());
     }
