@@ -2,6 +2,7 @@ package de.czyrux.mvploadersample;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Menu;
@@ -38,18 +39,20 @@ public class SampleActivity extends BasePresenterActivity<SamplePresenter, Sampl
         Log.e(TAG, "onStart-" + tag());
     }
 
+    @NonNull
     @Override
     protected String tag() {
         return "activity";
     }
 
+    @NonNull
     @Override
     protected PresenterFactory<SamplePresenter> getPresenterFactory() {
         return new SamplePresenterFactory(tag());
     }
 
     @Override
-    protected void onPresenterPrepared(SamplePresenter presenter) {
+    protected void onPresenterPrepared(@NonNull SamplePresenter presenter) {
         // Nothing right now
     }
 
