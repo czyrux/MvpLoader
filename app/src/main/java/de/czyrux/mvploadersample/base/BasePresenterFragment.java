@@ -19,6 +19,15 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
         super.onActivityCreated(savedInstanceState);
         Log.i(TAG, "onActivityCreated-" + tag());
 
+        Loader<P> loader = getLoaderManager().getLoader(loaderId());
+        if (loader == null) {
+            initLoader();
+        } else {
+            deliverPresenter(((PresenterLoader<P>) loader).getPresenter());
+        }
+    }
+
+    private void initLoader() {
         // LoaderCallbacks as an object, so no hint regarding loader will be leak to the subclasses.
         getLoaderManager().initLoader(loaderId(), null, new LoaderManager.LoaderCallbacks<P>() {
             @Override
@@ -30,8 +39,7 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
                 Log.i(TAG, "onLoadFinished-" + tag());
-                BasePresenterFragment.this.presenter = presenter;
-                onPresenterPrepared(presenter);
+                deliverPresenter(presenter);
             }
 
             @Override
@@ -43,18 +51,23 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
         });
     }
 
+    private void deliverPresenter(P presenter) {
+        BasePresenterFragment.this.presenter = presenter;
+        onPresenterPrepared(presenter);
+    }
+
     @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume-" + tag());
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart-" + tag());
         presenter.onViewAttached(getPresenterView());
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
         presenter.onViewDetached();
-        super.onPause();
-        Log.i(TAG, "onPause-" + tag());
+        super.onStop();
+        Log.i(TAG, "onStop-" + tag());
     }
 
     /**
