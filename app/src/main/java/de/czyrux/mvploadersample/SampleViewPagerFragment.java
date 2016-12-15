@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 public class SampleViewPagerFragment extends Fragment {
     private static final String ARG_PAGES = "pages";
-    private static final int MIN_OFF_SCREEN_LIMIT = 2;
+    private static final int OFF_SCREEN_LIMIT = 1;
 
     private int pages;
     private ViewPager viewPager;
@@ -45,9 +45,8 @@ public class SampleViewPagerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         viewPager.setAdapter(new PagerAdapter(getChildFragmentManager(), pages));
-        viewPager.setOffscreenPageLimit(Math.max(MIN_OFF_SCREEN_LIMIT, pages / 2));
+        viewPager.setOffscreenPageLimit(OFF_SCREEN_LIMIT);
     }
 
 

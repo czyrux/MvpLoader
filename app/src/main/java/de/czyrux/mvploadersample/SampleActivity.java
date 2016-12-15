@@ -17,7 +17,7 @@ import de.czyrux.mvploadersample.presenter.SampleView;
 
 public class SampleActivity extends BasePresenterActivity<SamplePresenter, SampleView> implements SampleView {
     private static final String TAG = "SampleActivity";
-    private static final int NUMBER_OF_PAGES = 3;
+    private static final int NUMBER_OF_PAGES = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class SampleActivity extends BasePresenterActivity<SamplePresenter, Sampl
     }
 
     @Override
-    protected void onPresenterPrepared(@NonNull SamplePresenter presenter) {
+    protected void onPresenterCreatedOrRestored(@NonNull SamplePresenter presenter) {
         // Nothing right now
     }
 

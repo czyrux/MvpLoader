@@ -6,7 +6,7 @@ public class SamplePresenter implements Presenter<SampleView> {
 
     private final String title;
     private SampleView view;
-    int count = 0;
+    private int count = 0;
 
     public SamplePresenter(String title) {
         this.title = title;
