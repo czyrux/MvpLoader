@@ -12,13 +12,23 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
     private static final String TAG = "base-fragment";
     private static final int LOADER_ID = 101;
 
-    private Presenter<V> presenter;
+    private P presenter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i(TAG, "onActivityCreated-" + tag());
 
+        Loader<P> loader = getLoaderManager().getLoader(loaderId());
+        if (loader == null) {
+            initLoader();
+        } else {
+            this.presenter = ((PresenterLoader<P>) loader).getPresenter();
+            onPresenterCreatedOrRestored(presenter);
+        }
+    }
+
+    private void initLoader() {
         // LoaderCallbacks as an object, so no hint regarding loader will be leak to the subclasses.
         getLoaderManager().initLoader(loaderId(), null, new LoaderManager.LoaderCallbacks<P>() {
             @Override
@@ -31,30 +41,29 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
             public final void onLoadFinished(Loader<P> loader, P presenter) {
                 Log.i(TAG, "onLoadFinished-" + tag());
                 BasePresenterFragment.this.presenter = presenter;
-                onPresenterPrepared(presenter);
+                onPresenterCreatedOrRestored(presenter);
             }
 
             @Override
             public final void onLoaderReset(Loader<P> loader) {
                 Log.i(TAG, "onLoaderReset-" + tag());
                 BasePresenterFragment.this.presenter = null;
-                onPresenterDestroyed();
             }
         });
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume-" + tag());
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart-" + tag());
         presenter.onViewAttached(getPresenterView());
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
         presenter.onViewDetached();
-        super.onPause();
-        Log.i(TAG, "onPause-" + tag());
+        super.onStop();
+        Log.i(TAG, "onStop-" + tag());
     }
 
     /**
@@ -74,13 +83,7 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
      * Hook for subclasses that deliver the {@link Presenter} before its View is attached.
      * Can be use to initialize the Presenter or simple hold a reference to it.
      */
-    protected abstract void onPresenterPrepared(@NonNull P presenter);
-
-    /**
-     * Hook for subclasses before the screen gets destroyed.
-     */
-    protected void onPresenterDestroyed() {
-    }
+    protected abstract void onPresenterCreatedOrRestored(@NonNull P presenter);
 
     /**
      * Override in case of fragment not implementing Presenter<View> interface

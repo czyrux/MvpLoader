@@ -52,7 +52,7 @@ public class SampleActivity extends BasePresenterActivity<SamplePresenter, Sampl
     }
 
     @Override
-    protected void onPresenterPrepared(@NonNull SamplePresenter presenter) {
+    protected void onPresenterCreatedOrRestored(@NonNull SamplePresenter presenter) {
         // Nothing right now
     }
 
