@@ -62,36 +62,31 @@ public class SampleFragment extends BasePresenterFragment<SamplePresenter, Sampl
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated-" + tag());
+        Log.i(TAG, "onActivityCreated-" + tag());
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart-" + tag());
-        // When first created the Fragment, the Presenter will be initialized at this point, but on
-        // a configuration change it wont be ready until onResume
-        Log.d(TAG, "onStart- is_presenter_null:" + String.valueOf(presenter == null));
+        Log.i(TAG, "onStart-" + tag());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume-" + tag());
-        Log.d(TAG, "onResume- is_presenter_null:" + String.valueOf(presenter == null));
+        Log.i(TAG, "onResume-" + tag());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause-" + tag());
-
+        Log.i(TAG, "onPause-" + tag());
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop-" + tag());
+        Log.i(TAG, "onStop-" + tag());
     }
 
     @NonNull
@@ -109,7 +104,7 @@ public class SampleFragment extends BasePresenterFragment<SamplePresenter, Sampl
     @Override
     protected void onPresenterPrepared(@NonNull SamplePresenter presenter) {
         this.presenter = presenter;
-        Log.d(TAG, "onPresenterPrepared-" + tag());
+        Log.i(TAG, "onPresenterPrepared-" + tag());
     }
 
     @Override

@@ -20,13 +20,13 @@ final class PresenterLoader<T extends Presenter> extends Loader<T> {
     protected void onStartLoading() {
         Log.i("loader", "onStartLoading-" + tag);
 
-        // if we already own a presenter instance, simply deliver it.
+        // we already own a presenter instance, simply deliver it.
         if (presenter != null) {
             deliverResult(presenter);
             return;
         }
 
-        // Otherwise, force a load
+        // Otherwise, force a "load"
         forceLoad();
     }
 

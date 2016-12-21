@@ -2,64 +2,43 @@ package de.czyrux.mvploadersample.base;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.util.Log;
 
 public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends Fragment {
 
     private static final String TAG = "base-fragment";
-    private static final int LOADER_ID = 101;
 
-    private Presenter<V> presenter;
+    private P presenter;
+
+    private LoaderHandler<P> loaderHandler;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        loaderHandler = new LoaderHandler<>(tag(), getContext(), getLoaderManager(), getPresenterFactory());
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i(TAG, "onActivityCreated-" + tag());
 
-        Loader<P> loader = getLoaderManager().getLoader(loaderId());
-        if (loader == null) {
-            initLoader();
-        } else {
-            deliverPresenter(((PresenterLoader<P>) loader).getPresenter());
-        }
-    }
-
-    private void initLoader() {
-        // LoaderCallbacks as an object, so no hint regarding loader will be leak to the subclasses.
-        getLoaderManager().initLoader(loaderId(), null, new LoaderManager.LoaderCallbacks<P>() {
+        loaderHandler.init(new LoaderHandler.Receiver<P>() {
             @Override
-            public final Loader<P> onCreateLoader(int id, Bundle args) {
-                Log.i(TAG, "onCreateLoader-" + tag());
-                return new PresenterLoader<>(getContext(), getPresenterFactory(), tag());
-            }
-
-            @Override
-            public final void onLoadFinished(Loader<P> loader, P presenter) {
-                Log.i(TAG, "onLoadFinished-" + tag());
-                deliverPresenter(presenter);
-            }
-
-            @Override
-            public final void onLoaderReset(Loader<P> loader) {
-                Log.i(TAG, "onLoaderReset-" + tag());
-                BasePresenterFragment.this.presenter = null;
-                onPresenterDestroyed();
+            public void onPresenterCreatedOrRestored(@NonNull P presenter) {
+                Log.e(TAG, "onPresenterCreatedOrRestored-" + tag());
+                BasePresenterFragment.this.presenter = presenter;
             }
         });
-    }
-
-    private void deliverPresenter(P presenter) {
-        BasePresenterFragment.this.presenter = presenter;
-        onPresenterPrepared(presenter);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         Log.i(TAG, "onStart-" + tag());
+        onPresenterPrepared(presenter);
         presenter.onViewAttached(getPresenterView());
     }
 
@@ -90,24 +69,10 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
     protected abstract void onPresenterPrepared(@NonNull P presenter);
 
     /**
-     * Hook for subclasses before the screen gets destroyed.
-     */
-    protected void onPresenterDestroyed() {
-    }
-
-    /**
      * Override in case of fragment not implementing Presenter<View> interface
      */
     @NonNull
     protected V getPresenterView() {
         return (V) this;
-    }
-
-    /**
-     * Use this method in case you want to specify a spefic ID for the {@link PresenterLoader}.
-     * By default its value would be {@link #LOADER_ID}.
-     */
-    protected int loaderId() {
-        return LOADER_ID;
     }
 }
