@@ -12,7 +12,7 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
     private static final String TAG = "base-fragment";
     private static final int LOADER_ID = 101;
 
-    private Presenter<V> presenter;
+    private P presenter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -23,7 +23,8 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
         if (loader == null) {
             initLoader();
         } else {
-            deliverPresenter(((PresenterLoader<P>) loader).getPresenter());
+            this.presenter = ((PresenterLoader<P>) loader).getPresenter();
+            onPresenterCreatedOrRestored(presenter);
         }
     }
 
@@ -39,21 +40,16 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
                 Log.i(TAG, "onLoadFinished-" + tag());
-                deliverPresenter(presenter);
+                BasePresenterFragment.this.presenter = presenter;
+                onPresenterCreatedOrRestored(presenter);
             }
 
             @Override
             public final void onLoaderReset(Loader<P> loader) {
                 Log.i(TAG, "onLoaderReset-" + tag());
                 BasePresenterFragment.this.presenter = null;
-                onPresenterDestroyed();
             }
         });
-    }
-
-    private void deliverPresenter(P presenter) {
-        BasePresenterFragment.this.presenter = presenter;
-        onPresenterPrepared(presenter);
     }
 
     @Override
@@ -87,13 +83,7 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
      * Hook for subclasses that deliver the {@link Presenter} before its View is attached.
      * Can be use to initialize the Presenter or simple hold a reference to it.
      */
-    protected abstract void onPresenterPrepared(@NonNull P presenter);
-
-    /**
-     * Hook for subclasses before the screen gets destroyed.
-     */
-    protected void onPresenterDestroyed() {
-    }
+    protected abstract void onPresenterCreatedOrRestored(@NonNull P presenter);
 
     /**
      * Override in case of fragment not implementing Presenter<View> interface
