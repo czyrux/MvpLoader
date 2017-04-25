@@ -4,13 +4,13 @@ import android.content.Context;
 import android.support.v4.content.Loader;
 import android.util.Log;
 
-public final class PresenterLoader<T extends Presenter> extends Loader<T> {
+final class PresenterLoader<T extends Presenter> extends Loader<T> {
 
     private final PresenterFactory<T> factory;
-    private T presenter;
     private final String tag;
+    private T presenter;
 
-    public PresenterLoader(Context context, PresenterFactory<T> factory, String tag) {
+    PresenterLoader(Context context, PresenterFactory<T> factory, String tag) {
         super(context);
         this.factory = factory;
         this.tag = tag;
@@ -59,5 +59,9 @@ public final class PresenterLoader<T extends Presenter> extends Loader<T> {
             presenter.onDestroyed();
             presenter = null;
         }
+    }
+
+    public T getPresenter() {
+        return presenter;
     }
 }

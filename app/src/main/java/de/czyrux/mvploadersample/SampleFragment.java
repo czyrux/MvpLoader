@@ -107,9 +107,9 @@ public class SampleFragment extends BasePresenterFragment<SamplePresenter, Sampl
     }
 
     @Override
-    protected void onPresenterPrepared(@NonNull SamplePresenter presenter) {
+    protected void onPresenterCreatedOrRestored(@NonNull SamplePresenter presenter) {
         this.presenter = presenter;
-        Log.d(TAG, "onPresenterPrepared-" + tag());
+        Log.d(TAG, "onPresenterCreatedOrRestored-" + tag());
     }
 
     @Override
